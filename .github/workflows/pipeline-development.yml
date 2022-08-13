@@ -37,5 +37,24 @@ jobs:
           run: ./mvnw verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=lab-devops-project
           env:
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            
+  tests:
+    name: Testes automatizados
+    needs: code-quality
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: Configura JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
+      - name: Testes Unitários
+        run: mvn -B test --file pom.xml
+        
+    
         
         
