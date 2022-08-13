@@ -19,18 +19,18 @@ import com.mongodb.client.result.InsertOneResult;
 @RestController()
 @RequestMapping("/mongo")
 public class MongoController {
-    @Value("${mongodb.uri}")
+    @Value("${spring.data.mongodb.uri}")
     private String mongoUri;
 
-    @GetMapping("/buscar") 
-    public String mongo() {        
+    @GetMapping("/buscar")
+    public String mongo() {
         var documento = buscarDocumentoNoMongo();
 
         if (documento == null) {
-            var id = criarDocumentoNoMongo();       
+            var id = criarDocumentoNoMongo();
             return "Foi inserido um registro no banco com id " + id.toString();
         }
-                
+
         return documento.toJson();
     }
 
@@ -38,11 +38,11 @@ public class MongoController {
         try (MongoClient mongoClient = MongoClients.create(mongoUri)) {
             MongoDatabase database = mongoClient.getDatabase("database_filmes");
             MongoCollection<Document> collection = database.getCollection("filmes");
-            
+
             InsertOneResult resultado = collection.insertOne(new Document()
                         .append("_id", new ObjectId())
                         .append("nome", "Pulp Fiction"));
-            
+
             return resultado.getInsertedId();
         }
     }
@@ -51,7 +51,7 @@ public class MongoController {
         try (MongoClient mongoClient = MongoClients.create(mongoUri)) {
             MongoDatabase database = mongoClient.getDatabase("database_filmes");
             MongoCollection<Document> collection = database.getCollection("filmes");
-            
+
             return collection.find(eq("nome", "Pulp Fiction")).first();
         }
     }
