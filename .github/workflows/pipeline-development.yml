@@ -21,10 +21,20 @@ jobs:
           cache: maven
       - name: Compilação
         run: mvn -B compile --file pom.xml
-        
-      - name: Análise SonarCloud
-        run: ./mvnw verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=lab-devops-project
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    
+  code-quality:
+      name: Qualidade de Código
+      runs-on: ubuntu-latest
+      needs: build
+      
+      steps:
+        - name: Git Checkout
+          uses: actions/checkout@v3
+        - name: Habilita execução mvnw
+          run: chmod +x mvnw
+        - name: Análise SonarCloud
+          run: ./mvnw verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=lab-devops-project
+          env:
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         
         
