@@ -24,14 +24,14 @@ jobs:
     
   code-quality:
       name: Qualidade de Código
-      runs-on: ubuntu-latest
       needs: build
+      runs-on: ubuntu-latest
       
       steps:
         - name: Git Checkout
           uses: actions/checkout@v3
         - name: Habilita execução mvnw
-          run: chmod +x mvnw
+          run: chmod +x ./mvnw
         - name: Análise SonarCloud
           run: ./mvnw verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=lab-devops-project
           env:
