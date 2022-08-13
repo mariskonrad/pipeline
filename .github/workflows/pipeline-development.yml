@@ -21,3 +21,10 @@ jobs:
           cache: maven
       - name: Compilação
         run: mvn -B compile --file pom.xml
+        
+      - name: Análise SonarCloud
+        run: ./mvnw verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=lab-devops-project
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        
+        
